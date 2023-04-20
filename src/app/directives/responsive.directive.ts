@@ -1,16 +1,14 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, HostBinding } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+import { Directive, ElementRef } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+@Directive({
+  selector: '[appResponsive]'
 })
-export class AppComponent {
-  title = 'my-app';
-  @HostBinding('class.pc') pcMode = false;
+export class ResponsiveDirective {
 
-  constructor(private breakpointObserver : BreakpointObserver) {
+  constructor(
+    private element:ElementRef,
+    private breakpointObserver : BreakpointObserver
+    ) {
       this.breakpointObserver
       .observe([Breakpoints.HandsetLandscape , Breakpoints.WebLandscape])
       .subscribe({
@@ -18,11 +16,11 @@ export class AppComponent {
             for (let breakpoint of Object.keys(result.breakpoints)) {
               if (result.breakpoints[breakpoint]) {
                 if (breakpoint == Breakpoints.HandsetLandscape) {
-                  this.pcMode = false;
+                  this.element.nativeElement.classList.remove('pc');
                 }
 
                 if (breakpoint == Breakpoints.WebLandscape) {
-                  this.pcMode = true;
+                  this.element.nativeElement.classList.add('pc');
                 }
               }
               
@@ -32,4 +30,3 @@ export class AppComponent {
      }
 
 }
- 
